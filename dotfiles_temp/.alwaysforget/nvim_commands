@@ -1,0 +1,95 @@
+-- Important/Basic --
+j, k, h, l -> down, up, left, right
+jk -> escape
+i -> insert
+a -> append
+: -> command
+V -> v-line (start high-lighting) 
+
+-- Movement --
+
+>> Moving Horizontally
+w -> move forward a word (considers punctuation as seperate words)
+W -> move forwards a word (punctuation ignored)
+b -> move backwards a word (considers puctuation as seperate words)
+B -> move backwards a word (punctuation ignored)
+e -> move to end of a word (considers punctuation as seperate words)
+E -> move to end of a word (considers punctuation as seperate words)
+
+>> Moving Vertically
+gg -> move to the top/beginning of a file
+G -> move to the bottom/end of a file
+Ctrl + e -> move the screen down without moving the cursor
+Ctrl + y -> move the screen up without moving the cursor
+Ctrl + f -> move forward/down one entire screen
+Ctrl + b -> move backward/up one entire screen
+Ctrl + d -> move forward/down half screen
+Ctrl + u -> move backwards/up half screen
+gd -> move to the local declaration of any code
+gD -> move to the global declaration of any code
+% -> move between pairs of (), {}, [] or any other type of such braces
+{ -> move to the next paragraph/ code block/ function/ etc.
+} -> move to the previous paragraph/ code block/ fucntion/ etc.
+fa -> move to the next occurence of the character 'a' in a sentence
+Fa -> move to the previous occurence of the character 'a' in a sentence
+ta -> jump to before of the next occurence of the character 'a' in a sentence
+Ta -> jump to after of the previous occurence of the character 'a' in a sentence
+
+>> Search and navigation
+* -> next occurence of the word under the cursor
+# -> previous occurence of the word under the cursor
+n -> next occurence of the word searched pattern
+N -> previous occurence of the word search pattern
+
+>> Moving across files
+Ctrl + O -> move in the previously opened file
+Ctrl + I move in the next file
+Ctrl + ^ -> move the previous two opened files
+:bn -> move into the next buffer
+:bp -> move to the previous buffer
+:b filename -> move from a buffer using a filename
+:bindex -> move from a buffer using an index
+
+>> Moving between tabs
+:tabnew filename -> create a tab of a file
+gt -> move to the next tab
+ngt -> move to the nth tab
+gT -> move to the previous tab
+:tabo -> close all the tabs except the current one
+:tabc -> close the tab 
+:tabm n -> move the current tab to nth position
+
+>> Movement in Marks
+mn -> set the current position as mark 'n asdfasdfadsf'
+<backtick>n -> jump to the position of mark 'n'
+
+>> Split Windows 
+
+-- Movement --
+Ctrl + w + r -> move the split down
+Ctrl + w + R -> move the split up
+Ctrl + w + h -> jump to the left split
+Ctrl + w + j -> jump to the split down
+Ctrl + w + k -> jump to the upper split
+Ctrl + w + l -> jump to the left split
+
+-- Change View -- 
+
+<leader> + e + e -> toggle file explorer
+<leader> + e + f -> toggle file explorer on current file
+
+-- Text Editing --
+y -> copy selected region
+CMD + v -> paste
+u -> undo
+Ctrl + r -> redo
+:%s/old/new/g -> replaces all occurences of 'old' with 'new' in the entire file
+Ctrl + & -> comment out sections
+
+
+-- Files --
+a -> add a file (append a '/' to the filename if you want to create a directory)
+
+
+
+

@@ -1,0 +1,73 @@
+-- Basic -- 
+Ctrl + c -> exit "scrolling mode" in terminal
+
+
+
+-- Sessions --
+
+>> Create New Sessions
+tmux new s0 -> creates new sessions named s0
+Ctrl+a:new s0 -> creates new session from inside Tmux named s0
+
+>> List all sessions
+tmux ls -> Show all sessions
+Ctrl+a s -> Show all sessions from inside Tmux
+
+>> Operations on sessions
+tmux a -t s0 -> Attach to session named s0
+Ctrl+a <command>{
+  $ -> rename session
+  d -> detatch from session
+  w -> session and window preview
+  ( -> move to previous session
+  ) -> move to next session
+}
+
+>> Terminate (kill) sessions
+tmux kill-ses -> kill last active session
+tmux kill-ses -t s0 -> kill session named s0
+tmux kill-ses -a -> kill all sessions except the current one
+tmux kill-ses -a -t s0 -> kill all sessions except s0
+
+-- Tmux Windows --
+Ctrl+a <command> {
+  0...9 -> switch to window by number
+  c -> create new window
+  , -> rename active window
+  & -> close active window (Tmux may prompt you to confirm your action with y/n)
+  p -> navigate to previous window
+  n -> navigate to next window
+  w -> list windows (which you may select and expand/collapse with arrow keys)
+  :swapw -s 0 -t 2 -> Swap windows 0 and 2
+  :swapw -t -1 -> move active window to the left by one position
+}
+
+-- Tmux Panes --
+Ctrl+a <command> {
+  q -> show pane numbers
+  q 0...9 -> swtich to pane by number
+  o -> swtich to next pane
+  z -> zoom in/out of pane
+  ! -> convert pane into new window
+  | -> split vertically
+  - -> split horizontally
+  j -> resize current pane downwards
+  k -> resize current pane upwards
+  h -> resize current pane leftwards
+  l -> resize current pane rightwards
+  ; -> toggle last active pane
+  [spacebar] -> toggle between pane layouts
+  x -> close current pane
+  :setw synchronize-pane -> toggle synchronize-panes (the ability to send the same command to all panes at once)
+}
+Ctrl + <command> {
+  j -> switch to upper pane
+  k -> switch to lower pane
+  h -> switch to left pane
+  l -> switch to right pane
+}
+
+
+
+-- Tmux Copy Mode -- 
+Ctrl+b [ -> 
