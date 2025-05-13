@@ -1,29 +1,44 @@
--- return {
---   -- Make sure the plugin is lazy-loaded or not, depending on your preference
---   "folke/tokyonight.nvim",
---   lazy = false, -- load it immediately
---   priority = 1000, -- load this before other plugins so the colors apply correctly
---   config = function()
---     require("tokyonight").setup({
---       style = "moon", -- "night", "storm", "moon", or "day"
---       transparent = false, -- set to true if you want a transparent background
---       terminal_colors = true, -- apply the theme’s colors to :terminal
---       styles = {
---         comments = { italic = false },
---         keywords = { italic = false },
---         functions = {},
---         variables = {},
---       },
---       sidebars = { "qf", "help", "terminal", "packer" },
---       on_highlights = function(hl, c)
---         -- You can tweak individual highlight groups here if needed.
---         -- For example:
---         -- hl.LineNr = { fg = c.dark5 }
---       end,
---     })
---     vim.cmd([[colorscheme tokyonight]])
---   end,
--- }
+-- ~/.config/nvim/lua/plugins/colorschemes.lua
+return {
+  {
+    "folke/tokyonight.nvim",
+    priority = 1000,
+    lazy     = false,
+    opts = {
+      style            = "night",
+      transparent      = false,
+      terminal_colors  = true,
+      day_brightness   = 0.0,
+      hide_inactive_statusline = false,
+      dim_inactive     = false,
+      -- your other opts…
+      on_highlights = function(hl, c)
+        -- flat, uniform background
+        hl.Normal       = { fg = c.fg,      bg = "#282A36" }
+        hl.NormalFloat  = { fg = c.fg,      bg = "#282A36" }
+        hl.SignColumn   = { bg = "#282A36" }
+        hl.LineNr       = { fg = "#5A5A60", bg = "#282A36" }
+        -- cursor line a touch lighter
+        hl.CursorLine   = { bg = "#3A3A4E" }
+        -- NvimTree panel
+        hl.NvimTreeNormal     = { bg = "#282A36" }
+        hl.NvimTreeEndOfBuffer= { fg = "#282A36", bg = "#282A36" }
+        -- pop-ups & floats
+        hl.FloatBorder  = { fg = "#5A5A60", bg = "#282A36" }
+        hl.NormalFloat  = { bg = "#282A36" }
+        -- comments greyed out
+        hl.Comment      = { fg = "#5A5A60", italic = false }
+        -- statusline / tabline
+        hl.StatusLine   = { fg = c.blue,    bg = "#282A36" }
+        hl.TabLine      = { fg = "#5A5A60", bg = "#282A36" }
+      end,
+    },
+    config = function(_, opts)
+      require("tokyonight").setup(opts)
+      vim.cmd("colorscheme tokyonight-night")
+    end,
+  },
+}
 
 -- return {
 --   "folke/tokyonight.nvim",
@@ -78,16 +93,3 @@
 --   end,
 --}
 
-return {
-  -- lush is required by nvim-snazzy
-  { "rktjmp/lush.nvim", lazy = false },
-
-  -- the actual Snazzy theme
-  {
-    "alexwu/nvim-snazzy",
-    lazy = false,           -- load immediately
-    priority = 10000,        -- load before other plugins
-    dependencies = { "rktjmp/lush.nvim" },
-    colorscheme = "snazzy", -- <--- this line applies the scheme
-  },
-}
