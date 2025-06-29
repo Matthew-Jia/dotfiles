@@ -15,6 +15,7 @@ brew tap koekeishiya/formulae
 ## Formulae
 echo "Installing Brew Formulae..."
 ### Essentials
+brew install node
 brew install gsl
 brew install llvm
 brew install boost

@@ -63,10 +63,10 @@ return {
       })
     end, { desc = "[F]ind [/] in Open Files" })
 
-    -- Search Neovim config files
-    vim.keymap.set("n", "<leader>fn", function()
-      builtin.find_files({ cwd = vim.fn.stdpath("config") })
-    end, { desc = "[F]ind [N]eovim files" })
+    -- Search config files
+    vim.keymap.set("n", "<leader>fd", function()
+      builtin.find_files({ cwd = "~/dotfiles", hidden = true })
+    end, { desc = "[F]ind [D]otfiles" })
 
     -- Find files by name (with substring matching)
     vim.keymap.set("n", "<leader>ff", function()

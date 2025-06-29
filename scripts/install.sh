@@ -1,6 +1,25 @@
-#install stow
+# Oh-My-ZSH
+echo "Installing OMZ"
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"in
+brew install zplug
+zplug "zsh-users/zsh-syntax-highlighting", as:plugin, defer:2
+zplug "zsh-users/zsh-autosuggestions", as:plugin, defer:2
 
-#install tmux
+# install node
+brew install node
+
+# install atuin
+brew install atuin
+
+# install stow
+echo "Installing Stow"
+brew install stow
+
+# install fish
+echo "Installing Fish"
+brew install fish
+
+# install tmux
 echo "Installing tmux"
 brew install tmux
 
@@ -22,7 +41,7 @@ brew install hammerspoon --cask
 
 # Aerospace
 echo "Installing Aerospace"
-brew install aerospace
+brew install --cask nikitabobko/tap/aerospace
 
 # Sketchy bar
 echo "Installing Sketchy bar Dependencies"
