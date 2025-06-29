@@ -42,12 +42,16 @@ return {
     -- enhance capabilities for autocompletion
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
-    -- custom diagnostic signs
-    local signs = { Error = "", Warn = "", Hint = "", Info = "" }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = "",
+          [vim.diagnostic.severity.WARN ] = "",
+          [vim.diagnostic.severity.INFO ] = "",
+          [vim.diagnostic.severity.HINT ] = "",
+        },
+      },
+    })
 
     -- List of servers to setup uniformly
     local servers = {
@@ -76,7 +80,10 @@ return {
           gopls = { analyses = { unusedparams = true, unreachable = true, nilness = true }, staticcheck = false },
         },
       },
-      clangd = { settings = { clangd = { analyses = {}, staticcheck = false } } },
+      clangd = { settings = { clangd = { analyses = {}, staticcheck = true } } },
+      kotlin_language_server = {
+        filetypes = { "kotlin", "kts", "kt" },
+      },
     }
 
     for name, cfg in pairs(servers) do

@@ -13,7 +13,7 @@ keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- delete single character without copying into register
--- keymap.set("n", "x", '"_x')
+keymap.set("n", "x", "_x")
 
 -- increment/decrement numbers
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
@@ -33,6 +33,17 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 -- hop.nvim --
 keymap.set("n", "<leader>w", ":HopWord<CR>", { silent = true }) -- Jump to a word
-keymap.set("n", "<leader>f", ":HopChar2<CR>", { silent = true }) -- Jump by two characters
 keymap.set("n", "<leader>j", ":HopLine<CR>", { silent = true }) -- Jump to a line
 keymap.set("n", "<leader>k", ":HopChar1<CR>", { silent = true }) -- Jump by one character
+
+-- line wrap --
+keymap.set("n", "<leader>tw", "<cmd>set wrap! linebreak!<CR>", { desc = "Toggle soft wrap" })
+keymap.set("n", "j", "gj", { desc = "Down by screen line" })
+keymap.set("n", "k", "gk", { desc = "Up by screen line" })
+keymap.set("n", "^", '(&wrap ? "g^" : "^")', { expr = true, silent = true, desc = "Smart ^ (screen or real line)" })
+keymap.set("n", "$", '(&wrap ? "g$" : "$")', { expr = true, silent = true, desc = "Smart $ (screen or real line)" })
+keymap.set("v", "j", "gj", { desc = "Visual down by screen line" })
+keymap.set("v", "k", "gk", { desc = "Visual up by screen line" })
+keymap.set("v", "^", '(&wrap ? "g^" : "^")', { expr = true, silent = true, desc = "Smart visual ^" })
+keymap.set("v", "$", '(&wrap ? "g$" : "$")', { expr = true, silent = true, desc = "Smart visual $" })
+

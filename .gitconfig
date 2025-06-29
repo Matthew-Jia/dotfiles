@@ -1,0 +1,5 @@
+[user]
+	name = Matthew Jia
+	email = jiamatt@amazon.com
+[pull]
+	rebase = true
