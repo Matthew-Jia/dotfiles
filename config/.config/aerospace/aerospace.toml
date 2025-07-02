@@ -62,12 +62,12 @@ on-focus-changed = "move-mouse window-lazy-center"
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 20
-inner.vertical =   20
-outer.left =       20
-outer.bottom =     20
+inner.horizontal = 5
+inner.vertical =   5
+outer.left =       5
+outer.bottom =     5
 outer.top =        10
-outer.right =      80
+outer.right =      5
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -114,6 +114,8 @@ alt-shift-l = 'move right'
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
 alt-m = 'workspace M'
 alt-x = 'workspace X'
 alt-b = 'workspace B'
@@ -122,6 +124,8 @@ alt-b = 'workspace B'
 alt-shift-1 = 'move-node-to-workspace 1'
 alt-shift-2 = 'move-node-to-workspace 2'
 alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
 alt-shift-m = 'move-node-to-workspace M'
 alt-shift-x = 'move-node-to-workspace X'
 alt-shift-b = 'move-node-to-workspace B'
@@ -232,5 +236,9 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Chime'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Outlook'
 run = 'layout floating'
 

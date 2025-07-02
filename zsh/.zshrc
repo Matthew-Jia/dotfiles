@@ -103,3 +103,7 @@ alias todo="~/todo-proj/todo-cli/venv/bin/todo"
 if [[ -f "$HOME/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]]; then
   builtin source "$HOME/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
 fi
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
