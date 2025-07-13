@@ -5,10 +5,10 @@ opt.relativenumber = true
 opt.number = true
 
 -- tabs & indetation
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
-opt.autoindent = true
+vim.opt.tabstop     = 2
+vim.opt.shiftwidth  = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab   = false
 
 -- line wrapping
 vim.opt.wrap       = false

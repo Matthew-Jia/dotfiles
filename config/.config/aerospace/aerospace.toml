@@ -242,3 +242,11 @@ run = 'layout floating'
 if.app-name-regex-substring = 'Outlook'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'Cisco'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'FaceTime'
+run = 'layout floating'
+

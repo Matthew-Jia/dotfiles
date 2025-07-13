@@ -4,6 +4,10 @@ vim.g.mapleader = " "
 local keymap = vim.keymap -- for conciseness
 
 -- General Keymaps --
+vim.keymap.del("n", "gri")
+vim.keymap.del("n", "grr")
+vim.keymap.del("n", "gra")
+vim.keymap.del("n", "grn")
 
 -- use jk to exit insert mode
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
@@ -30,11 +34,6 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
 
--- hop.nvim --
-keymap.set("n", "<leader>w", ":HopWord<CR>", { silent = true }) -- Jump to a word
-keymap.set("n", "<leader>j", ":HopLine<CR>", { silent = true }) -- Jump to a line
-keymap.set("n", "<leader>k", ":HopChar1<CR>", { silent = true }) -- Jump by one character
-
 -- line wrap --
 keymap.set("n", "<leader>tw", "<cmd>set wrap! linebreak!<CR>", { desc = "Toggle soft wrap" })
 keymap.set("n", "j", "gj", { desc = "Down by screen line" })
@@ -45,3 +44,13 @@ keymap.set("v", "j", "gj", { desc = "Visual down by screen line" })
 keymap.set("v", "k", "gk", { desc = "Visual up by screen line" })
 keymap.set("v", "^", '(&wrap ? "g^" : "^")', { expr = true, silent = true, desc = "Smart visual ^" })
 keymap.set("v", "$", '(&wrap ? "g$" : "$")', { expr = true, silent = true, desc = "Smart visual $" })
+
+-- toggle tab width -- 
+vim.keymap.set("n", "<leader>tt", function()
+  local ts = vim.bo.tabstop          -- current width
+  local new = (ts == 4) and 2 or 4   -- flip 4→2 or 2→4
+  vim.bo.tabstop     = new
+  vim.bo.shiftwidth  = new
+  vim.bo.softtabstop = new
+  vim.notify("Tab width set to " .. new)
+end, { desc = "Toggle tab width 2↔4" })
