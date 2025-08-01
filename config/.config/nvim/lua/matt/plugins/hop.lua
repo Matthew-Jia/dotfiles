@@ -14,7 +14,6 @@ return {
 
 		-- keymaps --
 		vim.keymap.set("n", "<leader>w", ":HopWord<CR>", { silent = true }) -- Jump to a word
-		vim.keymap.set("n", "<leader>j", ":HopLine<CR>", { silent = true }) -- Jump to a line
-		vim.keymap.set("n", "<leader>k", ":HopChar1<CR>", { silent = true }) -- Jump by one character
+		vim.keymap.set("n", "<leader>l", ":HopLine<CR>", { silent = true }) -- Jump to a line
   end,
 }
