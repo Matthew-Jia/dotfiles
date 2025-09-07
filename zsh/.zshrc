@@ -1,22 +1,25 @@
 # ~/.zshrc — streamlined and complete
 
-# --- Amazon Q pre-block (keep at top) ---
-if [[ -f "$HOME/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]]; then
-  builtin source "$HOME/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
-fi
+# Ensure SDK is known to non-Apple clang
+export SDKROOT="$(xcrun --show-sdk-path)"
 
 # --- Basic environment setup ---
 # Homebrew environment (in case GUI apps or brew commands are used)
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Use Homebrew LLVM first
+export LLVM="$(brew --prefix llvm)"
+export PATH="$LLVM/bin:$PATH"
+
+# Helpful when linking LLVM libs or using lld
+export LDFLAGS="-L$LLVM/lib -Wl,-rpath,$LLVM/lib"
+export CPPFLAGS="-I$LLVM/include"
 
 # Oh My Zsh base (for plugins/themes)
 export ZSH="$HOME/.oh-my-zsh"
 
 # zplug home (requires brew installed above)
 export ZPLUG_HOME="$(brew --prefix)/opt/zplug"
-
-# Java for Amazon Corretto
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-24.jdk/Contents/Home"
 
 # Disable default Oh My Zsh theme: use Pure via zplug
 ZSH_THEME=""
@@ -53,10 +56,10 @@ if ! zplug check --verbose; then
   fi
 fi
 
-# --- zshrc plugins ---
-plugins=(
-  tmux
-)
+# # --- zshrc plugins ---
+# plugins=(
+#   tmux
+# )
 
 source "$ZSH/oh-my-zsh.sh"
 
@@ -87,22 +90,15 @@ alias gc="git commit"
 alias gs="git status"
 alias gl="git log"
 alias p1="cd ~/482/jiamatt.1/handout/.impl/"
-alias p2="cd ~/482/jiamatt.jimmydai.kevinjia.2/.impl"
+alias p2="cd ~/482/jiamatt.2/.impl"
 alias p3="cd ~/482/jiamatt.jimmydai.kevinjia.3/.impl"
-alias p4="cd ~/482/jiamatt.jimmydai.kevinjia.4/.impl"
+alias p4="cd ~/482/jiamatt.4/.impl"
 alias ui="cd ~/workplace/ui/src/QOptimusWebStudioUI"
 alias wf='cd ~/workplace/wf/src/QOptimusAutomationWorkflow'
 alias api='cd ~/workplace/api/src/QOptimusApiService'
 alias apimodel='cd ~/workplace/apimodel/src/QOptimusApiServiceModel'
 alias wfmodel='cd ~/workplace/wfmodel/src/QOptimusAutomationWorkflowModel'
 alias tl='cd ~/workplace/tl/src/QOptimusOrchestrationTriggerLambda'
-alias btodo="/opt/homebrew/bin/todo"
-alias todo="~/todo-proj/todo-cli/venv/bin/todo"
-
-# --- Amazon Q post-block (keep at bottom) ---
-if [[ -f "$HOME/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]]; then
-  builtin source "$HOME/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-fi
 
 . "$HOME/.atuin/bin/env"
 

@@ -1,4 +1,4 @@
--- Plugin: nvim-lspconfig with DRY setup
+-- plugins/lspconfig.lua
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
@@ -7,39 +7,26 @@ return {
     { "antosha417/nvim-lsp-file-operations", config = true },
   },
   config = function()
-    local lspconfig = require("lspconfig")
+    local lspconfig    = require("lspconfig")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
-    local keymap = vim.keymap
+    local keymap       = vim.keymap
 
-    -- Common on_attach for all servers
-    local on_attach = function(client, bufnr)
-      -- disable all formatting on save
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-
-      -- buffer-local keymaps
+    -- common on_attach
+    local function on_attach(client, bufnr)
       local opts = { noremap = true, silent = true, buffer = bufnr }
       local mappings = {
-        { mode = "n", lhs = "gD", rhs = vim.lsp.buf.declaration, desc = "Go to declaration" },
-        { mode = "n", lhs = "gd", rhs = "<cmd>Telescope lsp_definitions<CR>", desc = "LSP definitions" },
-        { mode = "n", lhs = "gR", rhs = "<cmd>Telescope lsp_references<CR>", desc = "LSP references" },
-        { mode = "n", lhs = "gi", rhs = "<cmd>Telescope lsp_implementations<CR>", desc = "LSP implementations" },
-        { mode = "n", lhs = "gt", rhs = "<cmd>Telescope lsp_type_definitions<CR>", desc = "LSP type defs" },
-        { mode = { "n", "v" }, lhs = "<leader>ca", rhs = vim.lsp.buf.code_action, desc = "Code actions" },
-        { mode = "n", lhs = "<leader>rn", rhs = vim.lsp.buf.rename, desc = "Rename symbol" },
-        { mode = "n", lhs = "<leader>D", rhs = "<cmd>Telescope diagnostics bufnr=0<CR>", desc = "Buffer diagnostics" },
-        { mode = "n", lhs = "<leader>d", rhs = vim.diagnostic.open_float, desc = "Line diagnostics" },
-        { mode = "n", lhs = "[d", rhs = vim.diagnostic.goto_prev, desc = "Prev diagnostic" },
-        { mode = "n", lhs = "]d", rhs = vim.diagnostic.goto_next, desc = "Next diagnostic" },
-        { mode = "n", lhs = "K", rhs = vim.lsp.buf.hover, desc = "Hover docs" },
-        { mode = "n", lhs = "<leader>rs", rhs = ":LspRestart<CR>", desc = "Restart LSP" },
+        { "n", "gD", vim.lsp.buf.declaration,  "Go to declaration" },
+        { "n", "gd", "<cmd>Telescope lsp_definitions<CR>", "LSP definitions" },
+        -- …etc…
+        { "n", "<leader>rs", ":LspRestart<CR>", "Restart LSP" },
       }
       for _, m in ipairs(mappings) do
-        keymap.set(m.mode, m.lhs, m.rhs, vim.tbl_extend("force", opts, { desc = m.desc }))
+        keymap.set(m[1], m[2], m[3],
+          vim.tbl_extend("force", opts, { desc = m[4] })
+        )
       end
     end
 
-    -- enhance capabilities for autocompletion
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
     vim.diagnostic.config({
@@ -53,58 +40,51 @@ return {
       },
     })
 
-    -- List of servers to setup uniformly
-    local servers = {
-      html = {},
-      ts_ls = {},
-      cssls = {},
-      tailwindcss = {},
-      prismals = {},
-      graphql = { filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" } },
-      emmet_ls = {
-        filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-      },
-      pyright = { settings = { pyright = { analyses = {}, staticcheck = false } } },
-      lua_ls = {
-        settings = {
-          Lua = {
-            diagnostics = { enable = false },
-            workspace = {
-              library = { [vim.fn.expand("$VIMRUNTIME/lua")] = true, [vim.fn.stdpath("config") .. "/lua"] = true },
-            },
-          },
-        },
-      },
-      gopls = {
-        settings = {
-          gopls = { analyses = { unusedparams = true, unreachable = true, nilness = true }, staticcheck = false },
-        },
-      },
-      clangd = { settings = { clangd = { analyses = {}, staticcheck = true } } },
-      kotlin_language_server = {
-        filetypes = { "kotlin", "kts", "kt" },
-      },
-    }
-
-    for name, cfg in pairs(servers) do
-      cfg.capabilities = capabilities
-      cfg.on_attach = on_attach
-      lspconfig[name].setup(cfg)
+    local function setup(name, opts)
+      opts = vim.tbl_extend("force", {
+        on_attach    = on_attach,
+        capabilities = capabilities,
+      }, opts or {})
+      lspconfig[name].setup(opts)
     end
 
-    -- Svelte: extra post-write hook
-    lspconfig.svelte.setup(vim.tbl_extend("force", servers.svelte or {}, {
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        vim.api.nvim_create_autocmd("BufWritePost", {
-          pattern = { "*.js", "*.ts" },
-          callback = function(ctx)
-            if client.name == "svelte" then
-              client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
-            end
-          end,
-        })
-      end,
-    }))
+    -- just a list of server names
+    local servers = {
+      "pyright",
+      "gopls",
+      "clangd",
+      "lua_ls",
+    }
+
+    -- use ipairs to iterate an array of names
+    for _, name in ipairs(servers) do
+      setup(name)  -- no second arg ⇒ opts defaults to {}
+    end
+
+		-- 1. Enable virtual text (inline error messages) and underlines
+		vim.diagnostic.config({
+			virtual_text = {
+				prefix = "●",      -- could be "", "", etc.
+				spacing = 4,
+			},
+			signs = true,        -- you already have signs configured
+			underline = true,     -- underline text with errors/warnings
+			update_in_insert = false,  -- don’t spam while you’re typing
+			severity_sort = true,  -- show more severe diagnostics first
+		})
+
+		-- 2. Show a floating diagnostic window when you hover
+		vim.o.updatetime = 250  -- trigger CursorHold after 250ms of inactivity
+		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+			callback = function()
+				vim.diagnostic.open_float(nil, {
+					focusable = false,
+					border    = "rounded",
+					source    = "always",  -- show the “source=” line
+					header    = "",
+					prefix    = "",
+				})
+			end,
+		})
   end,
 }
