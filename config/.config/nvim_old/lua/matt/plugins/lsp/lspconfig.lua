@@ -54,6 +54,7 @@ return {
       "gopls",
       "clangd",
       "lua_ls",
+			"texlab",
     }
 
     -- use ipairs to iterate an array of names

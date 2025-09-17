@@ -1,8 +1,6 @@
 -- Basic -- 
 Ctrl + c -> exit "scrolling mode" in terminal
 
-
-
 -- Sessions --
 
 >> Create New Sessions
