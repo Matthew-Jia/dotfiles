@@ -1,2 +1,265 @@
-require("matt.core")
-require("matt.lazy")
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+local opt = vim.opt
+
+opt.relativenumber = true
+opt.number = true
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.softtabstop = 2
+opt.wrap = false
+opt.linebreak = false
+opt.breakindent = true
+opt.showbreak = "↪ "
+opt.ignorecase = true
+opt.smartcase = true
+opt.cursorline = true
+opt.termguicolors = true
+opt.backspace = "indent,eol,start"
+opt.clipboard:append("unnamedplus")
+
+local del = vim.keymap.del
+local set = vim.keymap.set
+
+del("n", "gri")
+del("n", "grr")
+del("n", "gra")
+del("n", "grn")
+
+set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
+set("n", "x", '"_x', { desc = "Delete character without copying to register" })
+set("n", "<leader>tw", "<cmd>set wrap! linebreak!<CR>", { desc = "Toggle line wrap" })
+set("n", "j", "gj", { desc = "Down by screen line" })
+set("n", "k", "gk", { desc = "Up by screen line" })
+set("n", "^", '(&wrap ? "g^" : "^")', { expr = true, silent = true, desc = "Smart ^ (screen or real line)" })
+set("n", "$", '(&wrap ? "g$" : "$")', { expr = true, silent = true, desc = "Smart $ (screen or real line)" })
+set("v", "j", "gj", { desc = "Visual down by screen line" })
+set("v", "k", "gk", { desc = "Visual up by screen line" })
+set("v", "^", '(&wrap ? "g^" : "^")', { expr = true, silent = true, desc = "Smart visual ^" })
+set("v", "$", '(&wrap ? "g$" : "$")', { expr = true, silent = true, desc = "Smart visual $" })
+set("n", "<leader>tt", function()
+  local ts = vim.bo.tabstop -- current width
+  local new = (ts == 4) and 2 or 4 -- flip 4→2 or 2→4
+  vim.bo.tabstop = new
+  vim.bo.shiftwidth = new
+  vim.bo.softtabstop = new
+  vim.notify("Tab width set to " .. new)
+end, { desc = "Toggle tab width 2↔4" })
+
+set("n", "<leader>dd", '"_dd', { desc = "Delete without copying to the default register" })
+set("x", "<leader>d", '"_d', { desc = "Delete without copying to the default register" })
+set("x", "<leader>p", '"_dP', { desc = "Paste without copying to the default register" })
+
+vim.lsp.enable({
+  "lua_ls",
+  "clangd",
+  "rust_analyzer",
+  "zls",
+  "ts_ls",
+  "pyright",
+  "gopls",
+  "tinymist",
+  "ocamllsp",
+})
+
+local cmd = function(command)
+  return function()
+    vim.cmd(command)
+  end
+end
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  spec = { 
+		{
+			"folke/tokyonight.nvim",
+			priority = 1000,
+			config = function()
+				local transparent = true
+
+				local bg = "#011628"
+				local bg_dark = "#011423"
+				local bg_highlight = "#143652"
+				local bg_search = "#0A64AC"
+				local bg_visual = "#275378"
+				local fg = "#CBE0F0"
+				local fg_dark = "#B4D0E9"
+				local fg_gutter = "#627E97"
+				local border = "#547998"
+
+				require("tokyonight").setup({
+					style = "night",
+					transparent = transparent,
+					styles = {
+						sidebars = transparent and "transparent" or "dark",
+						floats = transparent and "transparent" or "dark",
+					},
+					on_colors = function(colors)
+						colors.bg = bg
+						colors.bg_dark = transparent and colors.none or bg_dark
+						colors.bg_float = transparent and colors.none or bg_dark
+						colors.bg_highlight = bg_highlight
+						colors.bg_popup = bg_dark
+						colors.bg_search = bg_search
+						colors.bg_sidebar = transparent and colors.none or bg_dark
+						colors.bg_statusline = transparent and colors.none or bg_dark
+						colors.bg_visual = bg_visual
+						colors.border = border
+						colors.fg = fg
+						colors.fg_dark = fg_dark
+						colors.fg_float = fg
+						colors.fg_gutter = fg_gutter
+						colors.fg_sidebar = fg_dark
+					end,
+				})
+
+				vim.cmd("colorscheme tokyonight")
+			end,
+		},
+    {
+      "Pocco81/auto-save.nvim",
+      lazy = false, -- load on startup
+      enabled = true, -- auto-save is active right away
+      opts = { trigger_events = { "InsertLeave", "FocusLost" } },
+    },
+    {
+      "stevearc/conform.nvim",
+      event = { "BufReadPre", "BufNewFile" },
+      opts = { format_on_save = false },
+      keys = {
+        {
+          "<leader>mp",
+          function()
+            require("conform").format({ lsp_fallback = true })
+          end,
+          mode = { "n", "v" },
+          desc = "Format file or selection",
+        },
+      },
+    },
+    {
+      "ThePrimeagen/harpoon",
+      dependencies = { "nvim-lua/plenary.nvim" },
+      keys = {
+        {
+          "<leader>hm",
+          function()
+            require("harpoon.mark").add_file()
+          end,
+          desc = "Mark file",
+        },
+        {
+          "<leader>hh",
+          function()
+            require("harpoon.ui").toggle_quick_menu()
+          end,
+          desc = "Harpoon menu",
+        },
+      },
+    },
+    {
+      "phaazon/hop.nvim",
+      branch = "v2",
+			config = function()
+				require("hop").setup()
+				vim.opt.termguicolors = true
+
+				vim.cmd([[
+					highlight HopNextKey   guifg=#ff0000 gui=bold ctermfg=red cterm=bold
+					highlight HopNextKey1  guifg=#ff8800 gui=bold ctermfg=208 cterm=bold
+					highlight HopNextKey2  guifg=#ffff00 gui=bold ctermfg=yellow cterm=bold
+					highlight HopUnmatched guifg=#444444
+				]])
+				vim.keymap.set("n", "<leader>w", ":HopWord<CR>", { silent = true })
+				vim.keymap.set("n", "<leader>l", ":HopLine<CR>", { silent = true })
+			end,
+		},
+    {
+      "saghen/blink.cmp",
+      dependencies = { "rafamadriz/friendly-snippets" },
+      version = "1.*",
+      ---@module 'blink.cmp'
+      ---@type blink.cmp.Config
+      opts = {
+        keymap = { preset = "super-tab" },
+        signature = { enabled = true },
+      },
+    },
+    {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      config = function()
+        local configs = require("nvim-treesitter.configs")
+        configs.setup({
+          ensure_installed = { "c", "cpp", "markdown", "markdown_inline" },
+          sync_install = false,
+          highlight = { enable = true },
+          indent = { enable = true },
+        })
+      end,
+    },
+    {
+      "ibhagwan/fzf-lua",
+      dependencies = { "echasnovski/mini.icons" },
+			keys = function()
+				local fzf = require("fzf-lua")
+				return {
+					{ "<leader>ff", function() fzf.files({ hidden = false }) end, desc = "[F]ind [F]iles", },
+					{ "<leader>fa", function() fzf.files() end, desc = "[F]ind [A]ll files", },
+					{ "<leader>fd", function() fzf.files({ cwd = "~/dotfiles", hidden = true }) end, desc = "[F]ind [D]otfiles", },
+					{ "<leader>fg", function() fzf.live_grep() end, desc = "[F]ind by [G]rep", },
+					{ "<leader>/", function() fzf.blines() end, desc = "[/] Search in buffer" },
+					{ "gd", function() fzf.lsp_definitions() end, desc = "Go to [D]efinition" },
+					{ "gr", function() fzf.lsp_references() end, desc = "Go to [R]eferences" },
+					{ "gi", function() fzf.lsp_implementations() end, desc = "Go to [I]mplementation" },
+				}
+			end,
+      opts = {},
+    },
+    {
+	    "lervag/vimtex",
+	    ft = "tex",
+	    init = function()
+		    vim.g.vimtex_view_method = "skim"
+		    vim.g.vimtex_compiler_method = "latexmk"
+	    end,
+    },
+    {
+      'stevearc/oil.nvim',
+      ---@module 'oil'
+      ---@type oil.SetupOpts
+      opts = {
+        keymaps = {
+          -- disable for window switching
+          ["<C-h>"] = false,
+          ["<C-l>"] = false,
+        },
+      },
+      keys = {{"-", cmd("Oil")}},
+      dependencies = { { "echasnovski/mini.icons", opts = {} } },
+      lazy = false,
+    },
+		{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
+    { "christoomey/vim-tmux-navigator", lazy = false },
+    { "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" } },
+    { "folke/snacks.nvim" },
+    { "echasnovski/mini.pairs", version = false, opts = {}, event = "InsertEnter" },
+    { "echasnovski/mini.comment", version = false, opts = {}, event = { "BufReadPre", "BufNewFile" } },
+    { "neovim/nvim-lspconfig", event = { "BufReadPre", "BufNewFile" } },
+    { "kylechui/nvim-surround", config = true, event = { "BufReadPre", "BufNewFile" } },
+  },
+}
+)
