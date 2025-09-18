@@ -239,9 +239,8 @@ require("lazy").setup({
     },
     {
       'stevearc/oil.nvim',
-      ---@module 'oil'
-      ---@type oil.SetupOpts
       opts = {
+				view_options = { show_hidden = true },
         keymaps = {
           -- disable for window switching
           ["<C-h>"] = false,
@@ -252,6 +251,16 @@ require("lazy").setup({
       dependencies = { { "echasnovski/mini.icons", opts = {} } },
       lazy = false,
     },
+		{
+			"akinsho/toggleterm.nvim",
+			version = "*",
+			opts = {},
+			keys = {
+				{ "<leader>tf", cmd("ToggleTerm direction=float"),      desc = "Toggle floating terminal" },
+				{ "<leader>th", cmd("ToggleTerm direction=horizontal"), desc = "Toggle horizontal terminal" },
+				{ "<leader>tv", cmd("ToggleTerm direction=vertical"),   desc = "Toggle vertical terminal" },
+			},
+		},
 		{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
     { "christoomey/vim-tmux-navigator", lazy = false },
     { "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" } },

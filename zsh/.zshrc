@@ -1,105 +1,33 @@
-# ~/.zshrc — streamlined and complete
-
-# Ensure SDK is known to non-Apple clang
-export SDKROOT="$(xcrun --show-sdk-path)"
-
-# --- Basic environment setup ---
-# Homebrew environment (in case GUI apps or brew commands are used)
+# --- Homebrew ---
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Use Homebrew LLVM first
-export LLVM="$(brew --prefix llvm)"
-export PATH="$LLVM/bin:$PATH"
+# --- Plugin manager: znap ---
+[[ -r ~/Repos/znap/znap.zsh ]] || \
+  git clone --depth 1 https://github.com/marlonrichert/zsh-snap.git ~/Repos/znap
+source ~/Repos/znap/znap.zsh
 
-# Helpful when linking LLVM libs or using lld
-export LDFLAGS="-L$LLVM/lib -Wl,-rpath,$LLVM/lib"
-export CPPFLAGS="-I$LLVM/include"
+# Prompt + plugins
+znap prompt sindresorhus/pure
+znap source zsh-users/zsh-autosuggestions
+znap source zdharma-continuum/fast-syntax-highlighting
 
-# Oh My Zsh base (for plugins/themes)
 export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
 
-# zplug home (requires brew installed above)
-export ZPLUG_HOME="$(brew --prefix)/opt/zplug"
-
-# Disable default Oh My Zsh theme: use Pure via zplug
-ZSH_THEME=""
-# source "$zsh"
-
-# --- Path configuration ---
-# Define path array for zsh, then export to PATH
-typeset -U path
-path=(
-  $HOME/.toolbox/bin                             # JetBrains Toolbox
-  $HOME/.bash_completion.d                       # brazil CLI completion directory
-  $HOME/.zplug/bin                               # zplug
-  /opt/homebrew/bin                              # Homebrew
-  /opt/homebrew/sbin                             # Homebrew sbin
-  /Library/TeX/texbin                            # MacTeX/BasicTeX
-  "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"  # VSCode CLI
-  $HOME/.local/bin                               # local installs
-  $path                                         # append existing paths
-)
-export PATH
-
-# # --- Plugin manager: zplug ---
-source "$ZPLUG_HOME/init.zsh"
-zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-zplug load
-
-# Install plugins on first run
-if ! zplug check --verbose; then
-  printf "Install missing zplug plugins? [y/N] "
-  if read -q; then
-    echo
-    zplug install
-  fi
-fi
-
-# # --- zshrc plugins ---
-# plugins=(
-#   tmux
-# )
-
-source "$ZSH/oh-my-zsh.sh"
-
-# --- brazil CLI completion ---
-if [[ -f "$HOME/.brazil_completion/zsh_completion" ]]; then
-  source "$HOME/.brazil_completion/zsh_completion"
-fi
-
-# --- Convenience aliases ---
+# --- Aliases ---
 alias ..="cd .."
 alias c="clear"
 alias e="exit"
-alias nsync="ninja-dev-sync"
-alias cloud="ssh cloud"
-alias bb="brazil-build"
-alias bba="brazil-build apollo-pkg"
-alias bre="brazil-runtime-exec"
-alias brc="brazil-recursive-cmd"
-alias bws="brazil ws"
-alias bwsuse="bws use -p"
-alias bwscreate="bws create -n"
-alias bbr="brc brazil-build"
-alias bball="brc --allPackages"
-alias bbb="brc --allPackages brazil-build"
-alias bbra="bbr apollo-pkg"
 alias ga="git add"
 alias gc="git commit"
 alias gs="git status"
 alias gl="git log"
+
+# Temporary project aliases (remove when done with EECS 482)
 alias p1="cd ~/482/jiamatt.1/handout/.impl/"
 alias p2="cd ~/482/jiamatt.2/.impl"
 alias p3="cd ~/482/jiamatt.jimmydai.kevinjia.3/.impl"
 alias p4="cd ~/482/jiamatt.4/.impl"
-alias ui="cd ~/workplace/ui/src/QOptimusWebStudioUI"
-alias wf='cd ~/workplace/wf/src/QOptimusAutomationWorkflow'
-alias api='cd ~/workplace/api/src/QOptimusApiService'
-alias apimodel='cd ~/workplace/apimodel/src/QOptimusApiServiceModel'
-alias wfmodel='cd ~/workplace/wfmodel/src/QOptimusAutomationWorkflowModel'
-alias tl='cd ~/workplace/tl/src/QOptimusOrchestrationTriggerLambda'
 
 . "$HOME/.atuin/bin/env"
-
 eval "$(atuin init zsh)"

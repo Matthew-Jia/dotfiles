@@ -1,4 +1,4 @@
--- Important/Basic --
+# Important/Basic 
 j, k, h, l -> down, up, left, right
 jk -> escape
 i -> insert
@@ -6,7 +6,7 @@ a -> append
 : -> command
 V -> v-line (start high-lighting) 
 
--- Movement --
+# Movement 
 
 >> Moving Horizontally
 w -> move forward a word (considers punctuation as seperate words)
@@ -37,7 +37,7 @@ Ta -> jump to after of the previous occurence of the character 'a' in a sentence
 
 >> Search and navigation
 * -> next occurence of the word under the cursor
-# -> previous occurence of the word under the cursor
+\# -> previous occurence of the word under the cursor
 n -> next occurence of the word searched pattern
 N -> previous occurence of the word search pattern
 
@@ -65,7 +65,7 @@ mn -> set the current position as mark 'n asdfasdfadsf'
 
 >> Split Windows 
 
--- Movement --
+# Movement 
 Ctrl + w + r -> move the split down
 Ctrl + w + R -> move the split up
 Ctrl + w + h -> jump to the left split
@@ -73,11 +73,11 @@ Ctrl + w + j -> jump to the split down
 Ctrl + w + k -> jump to the upper split
 Ctrl + w + l -> jump to the left split
 
--- Change View -- 
+# Change View  
 <leader> + e + e -> toggle file explorer
 <leader> + e + f -> toggle file explorer on current file
 
--- Text Editing --
+# Text Editing
 y -> copy selected region
 CMD + v -> paste
 u -> undo
@@ -85,9 +85,40 @@ Ctrl + r -> redo
 :%s/old/new/g -> replaces all occurences of 'old' with 'new' in the entire file
 Ctrl + & -> comment out sections
 
--- Files --
+# Files
 a -> add a file (append a '/' to the filename if you want to create a directory)
 
+# windows
+(Ctrl + w) + v -> split window veritically
+(Ctrl + w) + q -> kill window
 
+# nvim-surround
 
+## Normal mode
+ys{motion}{char} -> add surround
+	- ysiw" -> surround inner word with quotes
+	- ys$) -> surround the rest of the line with quotes
+cs{old}{new} -> change surround
+  - cs"' -> "word" -> 'word'
+  - cs)] -> (word) -> [word]
+ds{char} -> delete surround
+  - ds" -> "word" -> word
+  - ds) -> (word) -> word
+
+## Visual mode
+S{char} -> surround selection
+  - select word, then S" -> "word"
+  - select phrase, then S) -> (phrase)
+
+## Insert mode
+<C-g>s{char} → surround word before cursor
+  - type word, then <C-g>s" → "word"
+<C-g>S{char} → surround entire line
+  - <C-g>S) → (whole line)
+
+# markdown
+zR -> open all folds
+zM -> close all folds
+za -> toggle under current fold
+zA -> toggle all folds under current fold
 
