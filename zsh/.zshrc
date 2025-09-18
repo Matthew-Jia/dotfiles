@@ -89,17 +89,21 @@ alias ga="git add"
 alias gc="git commit"
 alias gs="git status"
 alias gl="git log"
-alias p1="cd ~/482/jiamatt.1/handout/.impl/"
-alias p2="cd ~/482/jiamatt.2/.impl"
-alias p3="cd ~/482/jiamatt.jimmydai.kevinjia.3/.impl"
-alias p4="cd ~/482/jiamatt.4/.impl"
-alias ui="cd ~/workplace/ui/src/QOptimusWebStudioUI"
-alias wf='cd ~/workplace/wf/src/QOptimusAutomationWorkflow'
-alias api='cd ~/workplace/api/src/QOptimusApiService'
-alias apimodel='cd ~/workplace/apimodel/src/QOptimusApiServiceModel'
-alias wfmodel='cd ~/workplace/wfmodel/src/QOptimusAutomationWorkflowModel'
-alias tl='cd ~/workplace/tl/src/QOptimusOrchestrationTriggerLambda'
-
-. "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/kevinjia/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/kevinjia/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/Users/kevinjia/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/kevinjia/miniforge3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
