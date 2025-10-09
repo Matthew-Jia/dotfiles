@@ -1,0 +1,7 @@
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.dSYM/

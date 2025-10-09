@@ -51,18 +51,6 @@ set("n", "<leader>dd", '"_dd', { desc = "Delete without copying to the default r
 set("x", "<leader>d", '"_d', { desc = "Delete without copying to the default register" })
 set("x", "<leader>p", '"_dP', { desc = "Paste without copying to the default register" })
 
-vim.lsp.enable({
-  "lua_ls",
-  "clangd",
-  "rust_analyzer",
-  "zls",
-  "ts_ls",
-  "pyright",
-  "gopls",
-  "tinymist",
-  "ocamllsp",
-})
-
 local cmd = function(command)
   return function()
     vim.cmd(command)
@@ -101,7 +89,6 @@ require("lazy").setup({
 				local border = "#547998"
 
 				require("tokyonight").setup({
-					style = "night",
 					transparent = transparent,
 					styles = {
 						sidebars = transparent and "transparent" or "dark",
@@ -191,13 +178,77 @@ require("lazy").setup({
       "saghen/blink.cmp",
       dependencies = { "rafamadriz/friendly-snippets" },
       version = "1.*",
-      ---@module 'blink.cmp'
-      ---@type blink.cmp.Config
       opts = {
         keymap = { preset = "super-tab" },
         signature = { enabled = true },
       },
     },
+		{
+			"williamboman/mason.nvim",
+			build = ":MasonUpdate",
+			config = true,
+		},
+		{
+			"williamboman/mason-lspconfig.nvim",
+			dependencies = { "neovim/nvim-lspconfig" },
+			event = { "BufReadPre", "BufNewFile" },
+			config = function()
+				vim.diagnostic.config({
+					virtual_text = true,
+					signs = true,
+					underline = true,
+					float = { border = "rounded" },
+					update_in_insert = false,
+				})
+
+				local mason_lspconfig = require("mason-lspconfig")
+		
+				mason_lspconfig.setup({
+					ensure_installed = {
+						"clangd",
+						"lua_ls",
+						"pyright",
+						"gopls",
+						"rust_analyzer",
+						"ts_ls",       -- if this errors, try "tsserver"
+						"zls",
+						"ocamllsp",
+						"tinymist",
+						"neocmake",
+					},
+					automatic_installation = true,
+				})
+
+				local lspconfig = require("lspconfig")
+				local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+				mason_lspconfig.setup_handlers({
+					-- Default handler for most servers
+					function(server)
+						lspconfig[server].setup({
+							capabilities = capabilities,
+						})
+					end,
+
+					-- Override clangd to use your Homebrew binary
+					["clangd"] = function()
+						lspconfig.clangd.setup({
+							capabilities = capabilities,
+							cmd = { "/opt/homebrew/opt/llvm/bin/clangd" },
+						})
+					end,
+
+					-- Override tinymist to set filetypes
+					["tinymist"] = function()
+						lspconfig.tinymist.setup({
+							capabilities = capabilities,
+							cmd = { "tinymist" },
+							filetypes = { "typst" },
+						})
+					end,
+				})
+			end,
+		},
     {
       "nvim-treesitter/nvim-treesitter",
       build = ":TSUpdate",
@@ -261,13 +312,38 @@ require("lazy").setup({
 				{ "<leader>tv", cmd("ToggleTerm direction=vertical"),   desc = "Toggle vertical terminal" },
 			},
 		},
+		{
+			"yetone/avante.nvim",
+			build = vim.fn.has("win32") ~= 0
+				and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+				or "make",
+			event = "VeryLazy",
+			version = false,
+			opts = {
+				provider = "claude", -- pick one provider
+				providers = {
+					claude = {
+						endpoint = "https://api.anthropic.com",
+						model = "claude-3-5-haiku-20241022",
+					},
+				},
+			},
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"MunifTanjim/nui.nvim",
+			},
+			keys = {
+				{ "<leader>aa", "<cmd>AvanteAsk<CR>", desc = "Avante: Ask" },
+				{ "<leader>ac", "<cmd>AvanteChat<CR>", desc = "Avante: Chat" },
+			},
+		},
 		{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
     { "christoomey/vim-tmux-navigator", lazy = false },
     { "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" } },
     { "folke/snacks.nvim" },
     { "echasnovski/mini.pairs", version = false, opts = {}, event = "InsertEnter" },
     { "echasnovski/mini.comment", version = false, opts = {}, event = { "BufReadPre", "BufNewFile" } },
-    { "neovim/nvim-lspconfig", event = { "BufReadPre", "BufNewFile" } },
+    { "neovim/nvim-lspconfig" },
     { "kylechui/nvim-surround", config = true, event = { "BufReadPre", "BufNewFile" } },
   },
 }

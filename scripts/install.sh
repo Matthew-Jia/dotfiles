@@ -10,15 +10,15 @@ brew install zplug
 zplug "zsh-users/zsh-syntax-highlighting", as:plugin, defer:2
 zplug "zsh-users/zsh-autosuggestions", as:plugin, defer:2
 
-# install node
-brew install node
-
-# install atuin
+brew install nvm
+nvm install --lts
+nvm alias default lts-latest
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+curl https://sh.rustup.rs -sSf | sh
 brew install stow
 brew install fish
 brew install tmux
-
+brew install bear
 brew install fzf
 brew install lua-language-server
 brew install pyright

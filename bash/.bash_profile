@@ -6,3 +6,4 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/bash_profile.post.bash" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/bash_profile.post.bash"
 
 . "$HOME/.atuin/bin/env"
+. "$HOME/.cargo/env"

@@ -1,5 +1,8 @@
 # --- Homebrew ---
 eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 
 # --- Plugin manager: znap ---
 [[ -r ~/Repos/znap/znap.zsh ]] || \
@@ -22,12 +25,26 @@ alias ga="git add"
 alias gc="git commit"
 alias gs="git status"
 alias gl="git log"
+alias vim="nvim"
 
 # Temporary project aliases (remove when done with EECS 482)
 alias p1="cd ~/482/jiamatt.1/handout/.impl/"
 alias p2="cd ~/482/jiamatt.2/.impl"
-alias p3="cd ~/482/jiamatt.jimmydai.kevinjia.3/.impl"
+alias p3="cd ~/482/jiamatt.3"
 alias p4="cd ~/482/jiamatt.4/.impl"
 
+# --- Rust ---
+. "$HOME/.cargo/env"
+
+# --- Atuin ---
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
+
+
+# BEGIN opam configuration
+# This is useful if you're using opam as it adds:
+#   - the correct directories to the PATH
+#   - auto-completion for the opam binary
+# This section can be safely removed at any time if needed.
+[[ ! -r '/Users/matthewjia/.opam/opam-init/init.zsh' ]] || source '/Users/matthewjia/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+# END opam configuration
