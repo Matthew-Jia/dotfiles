@@ -1,6 +1,6 @@
 # --- Homebrew ---
 eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export PATH="/opt/homebrew/opt/llvm@18/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 

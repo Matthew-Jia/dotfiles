@@ -20,6 +20,7 @@ brew install fish
 brew install tmux
 brew install bear
 brew install fzf
+brew install zig
 brew install lua-language-server
 brew install pyright
 pip install python-lsp-server

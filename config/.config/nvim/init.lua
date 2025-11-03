@@ -70,6 +70,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- -- Keep packpath in sync with runtimepath (fixes E492 / missing :Copilot)
+-- vim.opt.packpath = vim.opt.runtimepath:get()
+
 require("lazy").setup({
   spec = { 
 		{
@@ -313,29 +316,14 @@ require("lazy").setup({
 			},
 		},
 		{
-			"yetone/avante.nvim",
-			build = vim.fn.has("win32") ~= 0
-				and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-				or "make",
-			event = "VeryLazy",
-			version = false,
-			opts = {
-				provider = "claude", -- pick one provider
-				providers = {
-					claude = {
-						endpoint = "https://api.anthropic.com",
-						model = "claude-3-5-haiku-20241022",
-					},
-				},
-			},
-			dependencies = {
-				"nvim-lua/plenary.nvim",
-				"MunifTanjim/nui.nvim",
-			},
-			keys = {
-				{ "<leader>aa", "<cmd>AvanteAsk<CR>", desc = "Avante: Ask" },
-				{ "<leader>ac", "<cmd>AvanteChat<CR>", desc = "Avante: Chat" },
-			},
+			"github/copilot.vim",
+			lazy = true,
+			cmd = { "Copilot" },      -- ensures :Copilot exists on demand
+			event = "InsertEnter",    -- also loads when you start typing
+			config = function()
+				vim.g.copilot_no_tab_map = true
+				vim.api.nvim_set_keymap("i", "<Right>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+			end,
 		},
 		{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
     { "christoomey/vim-tmux-navigator", lazy = false },
