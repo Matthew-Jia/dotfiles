@@ -40,6 +40,12 @@ alias p4="cd ~/482/jiamatt.4/.impl"
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
+function push_all() {
+  git add -A || return 1
+  git commit -m "THIS IS AN AUTO-GENERATED COMMIT BECAUSE I WAS TOO LAZY TO MAKE ONE" || return 1
+  git push || return 1
+  return 0
+}
 
 # BEGIN opam configuration
 # This is useful if you're using opam as it adds:
