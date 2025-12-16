@@ -8,7 +8,7 @@ local config = wezterm.config_builder()
 
 config.color_scheme = 'Snazzy'
 
-config.font = wezterm.font("Fira Code", { ligatures = true })
+config.font = wezterm.font("Fira Code")
 config.font_size = 12
 
 config.enable_tab_bar = false

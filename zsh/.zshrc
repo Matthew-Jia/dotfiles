@@ -36,9 +36,9 @@ alias p4="cd ~/482/jiamatt.4/.impl"
 # --- Rust ---
 . "$HOME/.cargo/env"
 
-# --- Atuin ---
-. "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh)"
+# # --- Atuin ---
+# . "$HOME/.atuin/bin/env"
+# eval "$(atuin init zsh)"
 
 function push_all() {
   git add -A || return 1

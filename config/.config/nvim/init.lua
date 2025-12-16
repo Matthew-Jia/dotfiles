@@ -51,6 +51,7 @@ set("n", "<leader>dd", '"_dd', { desc = "Delete without copying to the default r
 set("x", "<leader>d", '"_d', { desc = "Delete without copying to the default register" })
 set("x", "<leader>p", '"_dP', { desc = "Paste without copying to the default register" })
 
+
 local cmd = function(command)
   return function()
     vim.cmd(command)
@@ -124,21 +125,6 @@ require("lazy").setup({
       lazy = false, -- load on startup
       enabled = true, -- auto-save is active right away
       opts = { trigger_events = { "InsertLeave", "FocusLost" } },
-    },
-    {
-      "stevearc/conform.nvim",
-      event = { "BufReadPre", "BufNewFile" },
-      opts = { format_on_save = false },
-      keys = {
-        {
-          "<leader>mp",
-          function()
-            require("conform").format({ lsp_fallback = true })
-          end,
-          mode = { "n", "v" },
-          desc = "Format file or selection",
-        },
-      },
     },
     {
       "ThePrimeagen/harpoon",
@@ -316,15 +302,19 @@ require("lazy").setup({
 			},
 		},
 		{
-			"github/copilot.vim",
-			lazy = true,
-			cmd = { "Copilot" },      -- ensures :Copilot exists on demand
-			event = "InsertEnter",    -- also loads when you start typing
-			config = function()
-				vim.g.copilot_no_tab_map = true
-				vim.api.nvim_set_keymap("i", "<Right>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-			end,
+			"tpope/vim-fugitive",
+			cmd = { "Git", "G", "Gvdiffsplit", "Gdiffsplit", "Gread", "Gwrite" },
 		},
+		-- {
+		-- 	"github/copilot.vim",
+		-- 	lazy = true,
+		-- 	cmd = { "Copilot" },      -- ensures :Copilot exists on demand
+		-- 	event = "InsertEnter",    -- also loads when you start typing
+		-- 	config = function()
+		-- 		vim.g.copilot_no_tab_map = true
+		-- 		vim.api.nvim_set_keymap("i", "<Right>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+		-- 	end,
+		-- },
 		{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
     { "christoomey/vim-tmux-navigator", lazy = false },
     { "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" } },

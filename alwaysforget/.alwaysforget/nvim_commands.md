@@ -60,7 +60,7 @@ gT -> move to the previous tab
 :tabm n -> move the current tab to nth position
 
 >> Movement in Marks
-mn -> set the current position as mark 'n asdfasdfadsf'
+mn -> set the current position as mark 'n'
 <backtick>n -> jump to the position of mark 'n'
 
 >> Split Windows 
@@ -122,3 +122,8 @@ zM -> close all folds
 za -> toggle under current fold
 zA -> toggle all folds under current fold
 
+# Program Development
+:make -> make the program at the location that nvim was opened
+:cnext -> go to the next compilation error
+:cprev -> go to the previous compilation error
+:copen -> go to the list of compilation errors
