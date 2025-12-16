@@ -32,10 +32,7 @@ brew install rust-analyzer
 # Install nerd-font
 brew tap homebrew/cask-fonts
 brew install --cask font-jetbrains-mono-nerd-font
-brew install --cask font-meslo-lg-nerd-font
-brew install --cask sf-symbols
 brew install --cask font-sf-mono
-brew install --cask font-sf-pro
 
 # For vimtex
 brew install --cask mactex
