@@ -27,7 +27,7 @@ alias gs="git status"
 alias gl="git log"
 alias vim="nvim"
 
-# Temporary project aliases (remove when done with EECS 482)
+# project/file aliases
 alias p1="cd ~/482/jiamatt.1/handout/.impl/"
 alias p2="cd ~/482/jiamatt.2/.impl"
 alias p3="cd ~/482/jiamatt.3"
@@ -35,10 +35,6 @@ alias p4="cd ~/482/jiamatt.4/.impl"
 
 # --- Rust ---
 . "$HOME/.cargo/env"
-
-# # --- Atuin ---
-# . "$HOME/.atuin/bin/env"
-# eval "$(atuin init zsh)"
 
 function push_all() {
   git add -A || return 1
@@ -54,3 +50,22 @@ function push_all() {
 # This section can be safely removed at any time if needed.
 [[ ! -r '/Users/matthewjia/.opam/opam-init/init.zsh' ]] || source '/Users/matthewjia/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 # END opam configuration
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/matthewjia/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/matthewjia/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/matthewjia/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/matthewjia/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

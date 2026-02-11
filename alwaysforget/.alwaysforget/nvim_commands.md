@@ -1,98 +1,96 @@
 # Important/Basic 
-j, k, h, l -> down, up, left, right
-jk -> escape
-i -> insert
-a -> append
-: -> command
-V -> v-line (start high-lighting) 
+important/basic: j, k, h, l -> down, up, left, right
+important/basic: jk -> escape
+important/basic: i -> insert
+important/basic: a -> append
+important/basic: : -> command
+important/basic: V -> v-line (start high-lighting) 
 
 # Movement 
 
 >> Moving Horizontally
-w -> move forward a word (considers punctuation as seperate words)
-W -> move forwards a word (punctuation ignored)
-b -> move backwards a word (considers puctuation as seperate words)
-B -> move backwards a word (punctuation ignored)
-e -> move to end of a word (considers punctuation as seperate words)
-E -> move to end of a word (considers punctuation as seperate words)
+horizontal movement: w -> move forward a word (considers punctuation as seperate words)
+horizontal movement: W -> move forwards a word (punctuation ignored)
+horizontal movement: b -> move backwards a word (considers puctuation as seperate words)
+horizontal movement: B -> move backwards a word (punctuation ignored)
+horizontal movement: e -> move to end of a word (considers punctuation as seperate words)
+horizontal movement: E -> move to end of a word (considers punctuation as seperate words)
 
 >> Moving Vertically
-gg -> move to the top/beginning of a file
-G -> move to the bottom/end of a file
-Ctrl + e -> move the screen down without moving the cursor
-Ctrl + y -> move the screen up without moving the cursor
-Ctrl + f -> move forward/down one entire screen
-Ctrl + b -> move backward/up one entire screen
-Ctrl + d -> move forward/down half screen
-Ctrl + u -> move backwards/up half screen
-gd -> move to the local declaration of any code
-gD -> move to the global declaration of any code
-% -> move between pairs of (), {}, [] or any other type of such braces
-{ -> move to the next paragraph/ code block/ function/ etc.
-} -> move to the previous paragraph/ code block/ fucntion/ etc.
-fa -> move to the next occurence of the character 'a' in a sentence
-Fa -> move to the previous occurence of the character 'a' in a sentence
-ta -> jump to before of the next occurence of the character 'a' in a sentence
-Ta -> jump to after of the previous occurence of the character 'a' in a sentence
+horizontal movement: gg -> move to the top/beginning of a file
+horizontal movement: G -> move to the bottom/end of a file
+horizontal movement: Ctrl + e -> move the screen down without moving the cursor
+horizontal movement: Ctrl + y -> move the screen up without moving the cursor
+horizontal movement: Ctrl + f -> move forward/down one entire screen
+horizontal movement: Ctrl + b -> move backward/up one entire screen
+horizontal movement: Ctrl + d -> move forward/down half screen
+horizontal movement: Ctrl + u -> move backwards/up half screen
+horizontal movement: gd -> move to the local declaration of any code
+horizontal movement: gD -> move to the global declaration of any code
+horizontal movement: % -> move between pairs of (), {}, [] or any other type of such braces
+horizontal movement: { -> move to the next paragraph/ code block/ function/ etc.
+horizontal movement: } -> move to the previous paragraph/ code block/ fucntion/ etc.
+horizontal movement: fa -> move to the next occurence of the character 'a' in a sentence
+horizontal movement: Fa -> move to the previous occurence of the character 'a' in a sentence
+horizontal movement: ta -> jump to before of the next occurence of the character 'a' in a sentence
+horizontal movement: Ta -> jump to after of the previous occurence of the character 'a' in a sentence
 
 >> Search and navigation
-* -> next occurence of the word under the cursor
-\# -> previous occurence of the word under the cursor
-n -> next occurence of the word searched pattern
-N -> previous occurence of the word search pattern
+search and navigation: * -> next occurence of the word under the cursor
+search and navigation: \# -> previous occurence of the word under the cursor
+search and navigation: n -> next occurence of the word searched pattern
+search and navigation: N -> previous occurence of the word search pattern
 
 >> Moving across files
-Ctrl + O -> move in the previously opened file
-Ctrl + I move in the next file
-Ctrl + ^ -> move the previous two opened files
-:bn -> move into the next buffer
-:bp -> move to the previous buffer
-:b filename -> move from a buffer using a filename
-:bindex -> move from a buffer using an index
+moving across files: Ctrl + O -> move in the previously opened file
+moving across files: Ctrl + I move in the next file
+moving across files: Ctrl + ^ -> move the previous two opened files
+moving across files: :bn -> move into the next buffer
+moving across files: :bp -> move to the previous buffer
+moving across files: :b filename -> move from a buffer using a filename
+moving across files: :bindex -> move from a buffer using an index
+moving across files: :e filename -> start editing filename
 
 >> Moving between tabs
-:tabnew filename -> create a tab of a file
-gt -> move to the next tab
-ngt -> move to the nth tab
-gT -> move to the previous tab
-:tabo -> close all the tabs except the current one
-:tabc -> close the tab 
-:tabm n -> move the current tab to nth position
+moving between tabs: :tabnew filename -> create a tab of a file
+moving between tabs: gt -> move to the next tab
+moving between tabs: ngt -> move to the nth tab
+moving between tabs: gT -> move to the previous tab
+moving between tabs: :tabo -> close all the tabs except the current one
+moving between tabs: :tabc -> close the tab 
+moving between tabs: :tabm n -> move the current tab to nth position
 
 >> Movement in Marks
-mn -> set the current position as mark 'n'
-<backtick>n -> jump to the position of mark 'n'
+movement in marks: mn -> set the current position as mark 'n'
+movement in marks: <backtick>n -> jump to the position of mark 'n'
 
->> Split Windows 
+# Split Windows
 
-# Movement 
-Ctrl + w + r -> move the split down
-Ctrl + w + R -> move the split up
-Ctrl + w + h -> jump to the left split
-Ctrl + w + j -> jump to the split down
-Ctrl + w + k -> jump to the upper split
-Ctrl + w + l -> jump to the left split
+>> Creating Split Windows
+creating split windows: :vs -> create a vertical split 
+creating split windows: :sv -> create a horizontal split 
 
-# Change View  
-<leader> + e + e -> toggle file explorer
-<leader> + e + f -> toggle file explorer on current file
+>> Split Windows Movement 
+split windows movement: Ctrl + w + h -> jump to the left split
+split windows movement: Ctrl + w + j -> jump to the split down
+split windows movement: Ctrl + w + k -> jump to the upper split
+split windows movement: Ctrl + w + l -> jump to the left split
+
+>> Split Windows Control
+split windows control: Ctrl + w + r -> move the split down
+split windows control: Ctrl + w + R -> move the split up
 
 # Text Editing
-y -> copy selected region
-CMD + v -> paste
-u -> undo
-Ctrl + r -> redo
-:%s/old/new/g -> replaces all occurences of 'old' with 'new' in the entire file
-Ctrl + & -> comment out sections
-
-# Files
-a -> add a file (append a '/' to the filename if you want to create a directory)
-
-# windows
-(Ctrl + w) + v -> split window veritically
-(Ctrl + w) + q -> kill window
+text editing: y -> copy selected region
+text editing: CMD + v -> paste
+text editing: u -> undo
+text editing: Ctrl + r -> redo
+text editing: :%s/old/new/g -> replaces all occurences of 'old' with 'new' in the entire file
+text editing: Ctrl + & -> comment out sections
 
 # nvim-surround
+
+## Note: use the open version ({) to add spaces (text -> { text }) and the closed version (}) to not add spaces (text -> {text})
 
 ## Normal mode
 ys{motion}{char} -> add surround

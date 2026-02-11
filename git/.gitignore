@@ -7,3 +7,6 @@
 *.dSYM/
 .DS_Store
 **/.DS_Store
+bin/
+build/
+__pycache__/

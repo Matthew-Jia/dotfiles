@@ -7,3 +7,5 @@
 [user]
 	name = Matthew Jia
 	email = dwangmj27@gmail.com
+[core]
+	excludesfile = /Users/matthewjia/.gitignore

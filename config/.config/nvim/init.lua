@@ -39,12 +39,12 @@ set("v", "k", "gk", { desc = "Visual up by screen line" })
 set("v", "^", '(&wrap ? "g^" : "^")', { expr = true, silent = true, desc = "Smart visual ^" })
 set("v", "$", '(&wrap ? "g$" : "$")', { expr = true, silent = true, desc = "Smart visual $" })
 set("n", "<leader>tt", function()
-  local ts = vim.bo.tabstop -- current width
-  local new = (ts == 4) and 2 or 4 -- flip 4→2 or 2→4
-  vim.bo.tabstop = new
-  vim.bo.shiftwidth = new
-  vim.bo.softtabstop = new
-  vim.notify("Tab width set to " .. new)
+	local ts = vim.bo.tabstop -- current width
+	local new = (ts == 4) and 2 or 4 -- flip 4→2 or 2→4
+	vim.bo.tabstop = new
+	vim.bo.shiftwidth = new
+	vim.bo.softtabstop = new
+	vim.notify("Tab width set to " .. new)
 end, { desc = "Toggle tab width 2↔4" })
 
 set("n", "<leader>dd", '"_dd', { desc = "Delete without copying to the default register" })
@@ -53,29 +53,26 @@ set("x", "<leader>p", '"_dP', { desc = "Paste without copying to the default reg
 
 
 local cmd = function(command)
-  return function()
-    vim.cmd(command)
-  end
+	return function()
+		vim.cmd(command)
+	end
 end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
 
--- -- Keep packpath in sync with runtimepath (fixes E492 / missing :Copilot)
--- vim.opt.packpath = vim.opt.runtimepath:get()
-
 require("lazy").setup({
-  spec = { 
+	spec = {
 		{
 			"folke/tokyonight.nvim",
 			priority = 1000,
@@ -120,35 +117,35 @@ require("lazy").setup({
 				vim.cmd("colorscheme tokyonight")
 			end,
 		},
-    {
-      "Pocco81/auto-save.nvim",
-      lazy = false, -- load on startup
-      enabled = true, -- auto-save is active right away
-      opts = { trigger_events = { "InsertLeave", "FocusLost" } },
-    },
-    {
-      "ThePrimeagen/harpoon",
-      dependencies = { "nvim-lua/plenary.nvim" },
-      keys = {
-        {
-          "<leader>hm",
-          function()
-            require("harpoon.mark").add_file()
-          end,
-          desc = "Mark file",
-        },
-        {
-          "<leader>hh",
-          function()
-            require("harpoon.ui").toggle_quick_menu()
-          end,
-          desc = "Harpoon menu",
-        },
-      },
-    },
-    {
-      "phaazon/hop.nvim",
-      branch = "v2",
+		{
+			"Pocco81/auto-save.nvim",
+			lazy = false, -- load on startup
+			enabled = true, -- auto-save is active right away
+			opts = { trigger_events = { "InsertLeave", "FocusLost" } },
+		},
+		{
+			"ThePrimeagen/harpoon",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			keys = {
+				{
+					"<leader>hm",
+					function()
+						require("harpoon.mark").add_file()
+					end,
+					desc = "Mark file",
+				},
+				{
+					"<leader>hh",
+					function()
+						require("harpoon.ui").toggle_quick_menu()
+					end,
+					desc = "Harpoon menu",
+				},
+			},
+		},
+		{
+			"phaazon/hop.nvim",
+			branch = "v2",
 			config = function()
 				require("hop").setup()
 				vim.opt.termguicolors = true
@@ -158,20 +155,20 @@ require("lazy").setup({
 					highlight HopNextKey1  guifg=#ff8800 gui=bold ctermfg=208 cterm=bold
 					highlight HopNextKey2  guifg=#ffff00 gui=bold ctermfg=yellow cterm=bold
 					highlight HopUnmatched guifg=#444444
-				]])
+					]])
 				vim.keymap.set("n", "<leader>w", ":HopWord<CR>", { silent = true })
 				vim.keymap.set("n", "<leader>l", ":HopLine<CR>", { silent = true })
 			end,
 		},
-    {
-      "saghen/blink.cmp",
-      dependencies = { "rafamadriz/friendly-snippets" },
-      version = "1.*",
-      opts = {
-        keymap = { preset = "super-tab" },
-        signature = { enabled = true },
-      },
-    },
+		{
+			"saghen/blink.cmp",
+			dependencies = { "rafamadriz/friendly-snippets" },
+			version = "1.*",
+			opts = {
+				keymap = { preset = "super-tab" },
+				signature = { enabled = true },
+			},
+		},
 		{
 			"williamboman/mason.nvim",
 			build = ":MasonUpdate",
@@ -191,7 +188,7 @@ require("lazy").setup({
 				})
 
 				local mason_lspconfig = require("mason-lspconfig")
-		
+
 				mason_lspconfig.setup({
 					ensure_installed = {
 						"clangd",
@@ -199,7 +196,7 @@ require("lazy").setup({
 						"pyright",
 						"gopls",
 						"rust_analyzer",
-						"ts_ls",       -- if this errors, try "tsserver"
+						"ts_ls",
 						"zls",
 						"ocamllsp",
 						"tinymist",
@@ -238,22 +235,22 @@ require("lazy").setup({
 				})
 			end,
 		},
-    {
-      "nvim-treesitter/nvim-treesitter",
-      build = ":TSUpdate",
-      config = function()
-        local configs = require("nvim-treesitter.configs")
-        configs.setup({
-          ensure_installed = { "c", "cpp", "markdown", "markdown_inline" },
-          sync_install = false,
-          highlight = { enable = true },
-          indent = { enable = true },
-        })
-      end,
-    },
-    {
-      "ibhagwan/fzf-lua",
-      dependencies = { "echasnovski/mini.icons" },
+		{
+			"nvim-treesitter/nvim-treesitter",
+			build = ":TSUpdate",
+			config = function()
+				local configs = require("nvim-treesitter.configs")
+				configs.setup({
+					ensure_installed = { "c", "cpp", "markdown", "markdown_inline" },
+					sync_install = false,
+					highlight = { enable = true },
+					indent = { enable = true },
+				})
+			end,
+		},
+		{
+			"ibhagwan/fzf-lua",
+			dependencies = { "echasnovski/mini.icons" },
 			keys = function()
 				local fzf = require("fzf-lua")
 				return {
@@ -267,30 +264,31 @@ require("lazy").setup({
 					{ "gi", function() fzf.lsp_implementations() end, desc = "Go to [I]mplementation" },
 				}
 			end,
-      opts = {},
-    },
-    {
-	    "lervag/vimtex",
-	    ft = "tex",
-	    init = function()
-		    vim.g.vimtex_view_method = "skim"
-		    vim.g.vimtex_compiler_method = "latexmk"
-	    end,
-    },
-    {
-      'stevearc/oil.nvim',
-      opts = {
+			opts = {},
+		},
+		{
+			"lervag/vimtex",
+			-- ft = "tex",
+			init = function()
+				vim.g.vimtex_view_method = "skim"
+				vim.g.vimtex_compiler_method = "latexmk"
+				vim.g.vimtex_compiler_latexmk = { aux_dir = 'aux_build', out_dir = 'build' }
+			end,
+		},
+		{
+			'stevearc/oil.nvim',
+			opts = {
 				view_options = { show_hidden = true },
-        keymaps = {
-          -- disable for window switching
-          ["<C-h>"] = false,
-          ["<C-l>"] = false,
-        },
-      },
-      keys = {{"-", cmd("Oil")}},
-      dependencies = { { "echasnovski/mini.icons", opts = {} } },
-      lazy = false,
-    },
+				keymaps = {
+					-- disable for window switching
+					["<C-h>"] = false,
+					["<C-l>"] = false,
+				},
+			},
+			keys = {{"-", cmd("Oil")}},
+			dependencies = { { "echasnovski/mini.icons", opts = {} } },
+			lazy = false,
+		},
 		{
 			"akinsho/toggleterm.nvim",
 			version = "*",
@@ -316,13 +314,43 @@ require("lazy").setup({
 		-- 	end,
 		-- },
 		{ "folke/which-key.nvim", event = "VeryLazy", opts = {} },
-    { "christoomey/vim-tmux-navigator", lazy = false },
-    { "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" } },
-    { "folke/snacks.nvim" },
-    { "echasnovski/mini.pairs", version = false, opts = {}, event = "InsertEnter" },
-    { "echasnovski/mini.comment", version = false, opts = {}, event = { "BufReadPre", "BufNewFile" } },
-    { "neovim/nvim-lspconfig" },
-    { "kylechui/nvim-surround", config = true, event = { "BufReadPre", "BufNewFile" } },
-  },
+		{ "christoomey/vim-tmux-navigator", lazy = false },
+		{ "lewis6991/gitsigns.nvim", event = { "BufReadPre", "BufNewFile" } },
+		{ "folke/snacks.nvim" },
+		{
+			"echasnovski/mini.pairs",
+			version = false,
+			event = "InsertEnter",
+			opts = {
+				mappings = {
+					["$"] = { action = "closeopen", pair = "$$", neigh_pattern = "[^\\].", register = { cr = false } },
+				},
+			},
+			config = function(_, opts)
+				require("mini.pairs").setup(opts)
+
+				-- Define the logic in a reusable function
+				local function setup_tex_pairs()
+					vim.keymap.set("i", "$", "$$<Left>", { buffer = true, silent = true })
+					vim.keymap.set("i", "\\[", "\\[  \\]<Left><Left><Left>", { buffer = true, silent = true })
+					vim.keymap.set("i", "\\{", "\\{  \\}<Left><Left><Left>", { buffer = true, silent = true })
+				end
+
+				-- 1. Handle files opened via the command line (Current Buffer)
+				if vim.bo.filetype == "tex" then
+					setup_tex_pairs()
+				end
+
+				-- 2. Handle files opened later (Autocmd)
+				vim.api.nvim_create_autocmd("FileType", {
+					pattern = "tex",
+					callback = setup_tex_pairs,
+				})
+			end,
+		},
+		{ "echasnovski/mini.comment", version = false, opts = {}, event = { "BufReadPre", "BufNewFile" } },
+		{ "neovim/nvim-lspconfig" },
+		{ "kylechui/nvim-surround", config = true, event = { "BufReadPre", "BufNewFile" } },
+	},
 }
 )
