@@ -87,6 +87,7 @@ text editing: u -> undo
 text editing: Ctrl + r -> redo
 text editing: :%s/old/new/g -> replaces all occurences of 'old' with 'new' in the entire file
 text editing: Ctrl + & -> comment out sections
+text editing: Ctrl + v -> bypass neovim plugins for the next keystroke (most important for bypassing auto-pairs)
 
 # nvim-surround
 
