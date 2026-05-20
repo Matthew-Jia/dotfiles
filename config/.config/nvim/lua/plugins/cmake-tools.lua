@@ -23,9 +23,9 @@ return {
 			{ "<leader>tv", "<cmd>ToggleTerm direction=vertical<CR>",		desc = "Toggle vertical terminal" },
 		},
 	},
-
   {
     "mfussenegger/nvim-dap",
+		lazy = true,
     dependencies = {
       "rcarriga/nvim-dap-ui",
       "nvim-neotest/nvim-nio",
@@ -34,8 +34,9 @@ return {
     config = function()
       local dap = require("dap")
       local dapui = require("dapui")
+			local dapui_vt = require("nvim-dap-virtual-text")
 
-			local opts = {
+			local dapui_opts = {
         layouts = {
           {
             elements = {
@@ -58,9 +59,10 @@ return {
         },
       }
 
-      dapui.setup(opts)
+			local dapui_vt_opts = {}
 
-      require("nvim-dap-virtual-text").setup()
+      dapui.setup(dapui_opts)
+      dapui_vt.setup(dapui_vt_opts)
 
 			dap.adapters.codelldb = {
 				type = "server",
@@ -81,70 +83,121 @@ return {
         dapui.close()
       end
 
-      vim.keymap.set("n", "<F5>", dap.continue)
-      vim.keymap.set("n", "<F10>", dap.step_over)
-      vim.keymap.set("n", "<F11>", dap.step_into)
-      vim.keymap.set("n", "<F12>", dap.step_out)
-      vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
-      vim.keymap.set("n", "<leader>du", dapui.toggle)
+			vim.keymap.set("n", "<leader>ds", function()
+				if dap.session() then
+					dap.continue()
+				else
+					vim.cmd("CMakeDebug")
+				end
+			end, { desc = "dap start/continue" })
+
+			vim.keymap.set("n", "<leader>dt", function()
+				dap.terminate()
+				dapui.close()
+			end, { desc = "DAP terminate" })
+
+			vim.keymap.set("n", "<leader>dr", dap.restart_frame, { desc = "DAP restart frame" })
+			vim.keymap.set("n", "<leader>dc", dap.run_to_cursor, { desc = "DAP continue to cursor" })
+			vim.keymap.set("n", "<leader>dn", dap.step_over, { desc = "DAP step over" })
+			vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "DAP step into" })
+			vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "DAP step out" })
+			vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "DAP toggle breakpoint" })
+			vim.keymap.set("n", "<leader>dB", function()
+				require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+			end, { desc = "DAP conditional breakpoint" })
     end,
   },
 
-  {
-    "Civitasv/cmake-tools.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "akinsho/toggleterm.nvim",
-      "mfussenegger/nvim-dap",
-      "rcarriga/nvim-dap-ui",
-    },
-    opts = {
-      cmake_command = "cmake",
-      ctest_command = "ctest",
-      cmake_use_preset = true,
-      cmake_regenerate_on_save = true,
+	{
+		"Civitasv/cmake-tools.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"akinsho/toggleterm.nvim",
+			"mfussenegger/nvim-dap",
+			"rcarriga/nvim-dap-ui",
+		},
+		opts = function ()
+			local osys = require("cmake-tools.osys");
 
-      cmake_generate_options = {
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=1",
-      },
+			return {
+				cmake_command = "cmake", -- this is used to specify cmake command path
+				ctest_command = "ctest", -- this is used to specify ctest command path
+				ctest_show_labels = false, -- also show labels in the test picker
+				cmake_use_preset = true,
+				cmake_regenerate_on_save = false, -- auto generate when save CMakeLists.txt
+				cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1" }, -- this will be passed when invoke `CMakeGenerate`
+				cmake_build_options = {}, -- this will be passed when invoke `CMakeBuild`
+				-- support macro expansion:
+				--       ${kit}
+				--       ${kitGenerator}
+				--       ${variant:xx}
+				cmake_build_directory = function()
+					if osys.iswin32 then
+						return "out\\${variant:buildType}"
+					end
+					return "out/${variant:buildType}"
+				end, -- this is used to specify generate directory for cmake, allows macro expansion, can be a string or a function returning the string, relative to cwd.
+				cmake_compile_commands_options = {
+					action = "soft_link", -- available options: soft_link, copy, lsp, none
+					-- soft_link: this will automatically make a soft link from compile commands file to target
+					-- copy:      this will automatically copy compile commands file to target
+					-- lsp:       this will automatically set compile commands file location using lsp
+					-- none:      this will make this option ignored
+					target = vim.loop.cwd, -- path or function returning path to directory, this is used only if action == "soft_link" or action == "copy"
+				},
+				cmake_kits_path = nil, -- this is used to specify global cmake kits path, see CMakeKits for detailed usage
+				cmake_variants_message = {
+					short = { show = true }, -- whether to show short message
+					long = { show = true, max_length = 40 }, -- whether to show long message
+				},
+				cmake_dap_configuration = { -- debug settings for cmake
+					name = "cpp",
+					type = "codelldb",
+					request = "launch",
+					stopOnEntry = false,
+					runInTerminal = true,
+					console = "integratedTerminal",
+				},
 
-      cmake_build_directory = "build/${variant:buildType}",
+				cmake_executor = {
+					name = "quickfix",
+					opts = {
+						show = "only_on_error",
+						position = "belowright",
+						size = 10,
+						encoding = "utf-8",
+						auto_close_when_success = true,
+					},
+				},
 
-      cmake_executor = {
-        name = "toggleterm",
-        opts = {
-          direction = "float",
-          close_on_exit = false,
-          auto_scroll = true,
-          singleton = true,
-        },
-      },
+				cmake_runner = {
+					name = "terminal",
+					opts = {
+						name = "CMake Run",
+						prefix_name = "[CMakeRun]: ",
+						split_direction = "belowright",
+						split_size = 12,
 
-      cmake_runner = {
-        name = "toggleterm",
-        opts = {
-          direction = "float",
-          close_on_exit = false,
-          auto_scroll = true,
-          singleton = true,
-        },
-      },
+						start_insert = false,
+						focus = false,
+						do_not_add_newline = false,
 
-      cmake_notifications = {
-        runner = { enabled = true },
-        executor = { enabled = true },
-        spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
-        refresh_rate_ms = 100,
-      },
+						single_terminal_per_instance = true,
+						single_terminal_per_tab = true,
+						keep_terminal_static_location = true,
+						auto_resize = true,
+					},
+				},
 
-      cmake_dap_configuration = {
-        name = "cpp",
-        type = "codelldb",
-        request = "launch",
-        stopOnEntry = false,
-        runInTerminal = true,
-        console = "integratedTerminal",
-      },
-    },
+				cmake_notifications = {
+					runner = { enabled = false },
+					executor = { enabled = true },
+					spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }, -- icons used for progress display
+					refresh_rate_ms = 100, -- how often to iterate icons
+				},
+				cmake_virtual_text_support = true, -- Show the target related to current file using virtual text (at right corner)
+				cmake_use_scratch_buffer = false, -- A buffer that shows what cmake-tools has done
+			}
+		end,
 	},
 }
